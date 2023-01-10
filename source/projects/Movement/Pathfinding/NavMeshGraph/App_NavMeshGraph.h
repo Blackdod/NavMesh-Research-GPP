@@ -47,6 +47,7 @@ private:
 	float m_Width{ 5.f };
 	float m_Height{ 5.f };
 	Elite::Polygon m_BaseBox{};
+	bool didNavMeshChange{ false };
 
 	// --Level--
 	std::vector<NavigationColliderElement*> m_vNavigationColliders = {};
