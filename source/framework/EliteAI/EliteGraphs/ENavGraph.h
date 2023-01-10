@@ -15,12 +15,18 @@ namespace Elite
 		int GetNodeIdxFromLineIdx(int lineIdx) const;
 		Polygon* GetNavMeshPolygon() const;
 
+		//Update graph
+		void UpdateGraph( float playerRadius, Elite::Polygon& wall);
+
 	private:
 		//--- Datamembers ---
 		Polygon* m_pNavMeshPolygon = nullptr; //Polygon that represents navigation mesh
 
 		void CreateNavigationGraph();
 
+		//Update graph
+		const Polygon m_ContourMesh{};
+		std::vector<Elite::Polygon> m_Walls{};
 
 	private:
 		NavGraph(const NavGraph& other) = delete;

@@ -19,11 +19,12 @@ public:
 	//--- Functions ---
 	void RenderElement();
 
-private:
-	//--- Datamembers ---
-	RigidBody* m_pRigidBody = nullptr;
 	float m_Width = 0.0f;
 	float m_Height = 0.0f;
 	Elite::Vector2 m_Position = Elite::ZeroVector2;
+private:
+	//--- Datamembers ---
+	RigidBody* m_pRigidBody = nullptr;
+	
 };
 #endif

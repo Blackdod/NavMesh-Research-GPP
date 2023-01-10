@@ -316,9 +316,18 @@ const std::vector<Elite::Triangle*>& Elite::Polygon::Triangulate()
 
 		//Push triangle
 		Vector2 current, prev, next;
-		GetTriangle(copyPoints, earListIt, current, prev, next);
-		Triangle* t = new Triangle(prev, current, next);
-		m_vpTriangles.push_back(t);
+		if (earListIt != copyPoints.end())
+		{
+			GetTriangle(copyPoints, earListIt, current, prev, next);
+			Triangle* t = new Triangle(prev, current, next);
+			m_vpTriangles.push_back(t);
+		}
+		else
+		{
+			GetTriangle(copyPoints, copyPoints.begin(), current, prev, next);
+			Triangle* t = new Triangle(prev, current, next);
+			m_vpTriangles.push_back(t);
+		}
 
 		//Remove current from pointslist
 		const auto currentIt = std::find(copyPoints.begin(), copyPoints.end(), current);

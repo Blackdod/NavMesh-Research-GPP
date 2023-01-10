@@ -43,6 +43,11 @@ private:
 	float m_AgentRadius = 1.0f;
 	float m_AgentSpeed = 16.0f;
 
+	//Walls
+	float m_Width{ 5.f };
+	float m_Height{ 5.f };
+	Elite::Polygon m_BaseBox{};
+
 	// --Level--
 	std::vector<NavigationColliderElement*> m_vNavigationColliders = {};
 
@@ -67,5 +72,8 @@ private:
 	//C++ make the class non-copyable
 	App_NavMeshGraph(const App_NavMeshGraph&) = delete;
 	App_NavMeshGraph& operator=(const App_NavMeshGraph&) = delete;
+
+	//Walls
+	Elite::Polygon CreateWall(Elite::Vector2 position, float width, float height);
 };
 #endif

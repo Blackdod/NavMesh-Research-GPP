@@ -40,15 +40,10 @@ void App_NavMeshGraph::Start()
 	DEBUGRENDERER2D->GetActiveCamera()->SetZoom(36.782f);
 	DEBUGRENDERER2D->GetActiveCamera()->SetCenter(Elite::Vector2(12.9361f, 0.2661f));
 
-	//----------- WORLD ------------
-	m_vNavigationColliders.push_back(new NavigationColliderElement(Elite::Vector2(25.f, 12.f), 45.0f, 7.0f));
-	m_vNavigationColliders.push_back(new NavigationColliderElement(Elite::Vector2(-35.f, 7.f), 14.0f, 10.0f));
-	m_vNavigationColliders.push_back(new NavigationColliderElement(Elite::Vector2(-13.f, -8.f), 30.0f, 2.0f));
-	m_vNavigationColliders.push_back(new NavigationColliderElement(Elite::Vector2(15.f, -21.f), 50.0f, 3.0f));
-
 	//----------- NAVMESH  ------------
 	std::list<Elite::Vector2> baseBox
 	{ { -60, 30 },{ -60, -30 },{ 60, -30 },{ 60, 30 } };
+	m_BaseBox = Elite::Polygon{ baseBox };
 
 	m_pNavGraph = new Elite::NavGraph(Elite::Polygon(baseBox), m_AgentRadius);
 
@@ -76,6 +71,18 @@ void App_NavMeshGraph::Update(float deltaTime)
 			Elite::Vector2((float)mouseData.X, (float)mouseData.Y));
 		m_vPath = NavMeshPathfinding::FindPath(m_pAgent->GetPosition(), mouseTarget, m_pNavGraph, m_DebugNodePositions, m_Portals);
 		//std::cout << mouseTarget.x << ", " << mouseTarget.y << '\n';
+	}
+	else if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eLeft))
+	{
+		auto mouseData = INPUTMANAGER->GetMouseData(Elite::InputType::eMouseButton, Elite::InputMouseButton::eLeft);
+		Elite::Vector2 mouseTarget = DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld(
+			Elite::Vector2((float)mouseData.X, (float)mouseData.Y));
+
+		Elite::Polygon newWall = CreateWall(mouseTarget, m_Width, m_Height);
+		if (newWall.GetCenterPoint() != Elite::Vector2(0, 0)) //placed a wall somewhere wrong
+		{
+			m_pNavGraph->UpdateGraph(m_pAgent->GetRadius(), newWall);
+		}
 	}
 
 	//Check if a path exist and move to the following point
@@ -218,4 +225,48 @@ void App_NavMeshGraph::UpdateImGui()
 	}
 #pragma endregion
 #endif
+}
+
+Elite::Polygon App_NavMeshGraph::CreateWall(Elite::Vector2 position, float width, float height)
+{
+	for (const auto& collider : m_vNavigationColliders)
+	{
+		Elite::Vector2 colBottomLeft{ collider->m_Position.x - collider->m_Width / 2, collider->m_Position.y - collider->m_Height / 2 };
+		Elite::Vector2 colTopRight{ collider->m_Position.x + collider->m_Width / 2 , collider->m_Position.y + collider->m_Height / 2 };
+
+		if (position.x > colBottomLeft.x - width && position.x < colTopRight.x + width)
+		{
+			if (position.y > colBottomLeft.y - height && position.y < colTopRight.y + height )
+			{
+				std::cout << "Can't place wall here!\n";
+				return Elite::Polygon{};
+			}
+		}
+	}
+
+	Elite::Vector2 baseBottomLeft{ m_BaseBox.GetPosVertMinXPos(), m_BaseBox.GetPosVertMinYPos() };
+	Elite::Vector2 baseTopRight{ m_BaseBox.GetPosVertMaxXPos(), m_BaseBox.GetPosVertMaxYPos() };
+
+	if (position.x < baseBottomLeft.x + width || position.x > baseTopRight.x - width)
+	{
+		std::cout << "Can't place wall here!\n";
+		return Elite::Polygon{};
+	}
+	else if (position.y < baseBottomLeft.y + height || position.y > baseTopRight.y - height)
+	{
+		std::cout << "Can't place wall here!\n";
+		return Elite::Polygon{};
+	}
+
+	m_vNavigationColliders.push_back(new NavigationColliderElement(position, width, height));
+
+	Elite::Vector2 bottomLeft{ position.x - width / 2, position.y - height / 2 };
+	Elite::Vector2 bottomRight{ position.x + width / 2, position.y - height / 2 };
+	Elite::Vector2 topLeft{ position.x - width / 2, position.y + height / 2 };
+	Elite::Vector2 topRight{ position.x + width / 2 , position.y + height / 2  };
+
+	std::list<Elite::Vector2> wallBox
+	{ topLeft, topRight, bottomRight, bottomLeft };
+
+	return Elite::Polygon{ wallBox };
 }
