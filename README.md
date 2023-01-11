@@ -14,8 +14,11 @@ The user can change the width and height of these walls and is obstructed from p
 
 Everytime a new wall gets created, the entire navmesh needs to be rebuilt.
 All the vertices need to be renumbered otherwise the ear clipping algorithm would not work correctly.
+Sadly, there are a few other occasional bugs that I did not have the time to fix.
 
 Perhaps with another algorithm, I wouldn't have needed to do this expensive process.
+With more time I could've also polished the project further, removing the last few bugs.
+
 ## Acknowledgements
 
  - My main reference were the given slides in week 06.
