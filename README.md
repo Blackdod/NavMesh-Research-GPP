@@ -22,6 +22,3 @@ Perhaps with another algorithm, I wouldn't have needed to do this expensive proc
  - My second most important guide was this video: https://www.youtube.com/watch?v=QAdfkylpYwc
 
 ## Demo
-
-Insert gif or link to demo
-
