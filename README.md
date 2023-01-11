@@ -23,4 +23,4 @@ Perhaps with another algorithm, I wouldn't have needed to do this expensive proc
 
 ## Demo
 
-![ Alt text](research. gif) / ! [](research. gif)
+![Research](https://user-images.githubusercontent.com/77245042/211941971-503551ad-0179-476a-bd94-87deb7251158.gif)
