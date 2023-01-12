@@ -26,4 +26,4 @@ With more time I could've also polished the project further, removing the last f
 
 ## Demo
 
-![Research](https://user-images.githubusercontent.com/77245042/211941971-503551ad-0179-476a-bd94-87deb7251158.gif)
+[![Research](https://user-images.githubusercontent.com/77245042/211941971-503551ad-0179-476a-bd94-87deb7251158.gif)](https://user-images.githubusercontent.com/77245042/212044674-55031370-022a-4a9d-954a-6b01d8aca8f6.mp4)
